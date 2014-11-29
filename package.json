@@ -1,0 +1,15 @@
+{
+	"name": "TwitchTimer",
+	"main": "index.html",
+	"window": {
+		"toolbar": false,
+		"width": 400,
+		"height": 225
+	},
+	"dependencies": {
+		"moment": "*",
+		"moment-duration-format": "*",
+		"twitch-irc": "*",
+		"underscore": "*"
+	}
+}

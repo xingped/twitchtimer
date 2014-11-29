@@ -1,0 +1,142 @@
+<html>
+	<head>
+		<title>Twitch Timer</title>
+		<script src="js/jquery-1.11.1.min.js"></script>
+		<link rel="stylesheet" href="css/bootstrap.min.css" type="text/css">
+		<script src="js/bootstrap.min.js"></script>
+	</head>
+	<body>
+		<div class="container" style="margin-top: 15px;">
+			<div class="jumbotron" style="margin-bottom: 15px;">
+				<center><span id="timer" style="font-weight: 400;">00:00:00</span></center>
+			</div>
+			<center>
+				<button id="start" type="button" class="btn btn-lg btn-success pull-left">Start</button>
+				<button id="reset" type="button" class="btn btn-lg btn-primary pull-right">Reset</button>
+				<button id="stop" type="button" class="btn btn-lg btn-danger">Stop</button>
+				<div class="clearfix"></div>
+			</center>
+		</div>
+		<span class="pull-right" style="margin-top: 3px; margin-right: 10px; font-size: 12">Made by: <a id="author" href="http://www.paulgatterdam.com">Paul Gatterdam</a></span>
+	</body>
+	<script type="text/javascript">
+		$(document).on('ready', function() {
+			// Initial setup
+			var moment = require('moment');
+			require('moment-duration-format');
+			var _ = require('underscore');
+			var gui = require('nw.gui');
+			var win = gui.Window.get();
+
+			// Get settings attributes
+			var fs = require('fs');
+			var settings_file = fs.readFileSync('settings.json');
+			var settings = JSON.parse(settings_file);
+
+			// Set settings attributes
+			$('head').append('<link href="'+settings.font_src+'" rel="stylesheet" type="text/css">');
+			$('.jumbotron').css('background-color', settings.background);
+			$('#timer').css('color', settings.font_color);
+			$('#timer').css('font-family', settings.font_family);
+			$('#timer').css('font-size', settings.font_size);
+
+			// Set up initial timer
+			timeron = false;
+			timer = moment.duration(settings.time, 's');
+			$('#timer').text(timer.format('hh:mm:ss', {trim: false}));
+			
+			// Handle button clicks
+			var timerinterval;
+			$('#start').click(function() {
+				timeron = true;
+				timerinterval = setInterval(function() {
+					timer.add(1, 's');
+					$('#timer').text(timer.format('hh:mm:ss', {trim: false}));
+				}, 1000);
+			});
+
+			$('#stop').click(function() {
+				timeron = false;
+				clearInterval(timerinterval);
+			});
+
+			$('#reset').click(function() {
+				var reset = confirm("Are you sure you want to reset timer?");
+				if(reset) {
+					clearInterval(timerinterval);
+					timeron = false;
+					timer = moment.duration(0, 's');
+					$('#timer').text(timer.format('hh:mm:ss', {trim: false}));
+				}
+			});
+
+			// Handle window close
+			win.on('close', function() {
+				settings.time = timer.seconds();
+				fs.writeFileSync('settings.json', JSON.stringify(settings, null, '\t'));
+				this.close(true);
+				win.close();
+			});
+
+			// Open author link in external browser
+			$('#author').click(function(e) {
+				e.preventDefault();
+				gui.Shell.openExternal($(this).attr('href'));
+			});
+
+			/****************
+			* IRC Functions *
+			****************/
+			var irc = require('twitch-irc');
+
+			var client = new irc.client({
+				options: {
+					debug: true
+				},
+				identity: {
+					username: settings.username,
+					password: settings.password
+				},
+				channels: [settings.channel]
+			});
+
+			client.connect();
+
+			// On channel join
+			client.addListener('join', function(channel, username) {
+				if(username === settings.username) {
+					client.mods(settings.channel);
+				}
+			});
+
+			// On mods query event
+			var modlist;
+			client.addListener('mods', function(channel, mods) {
+				if(channel === '#'+settings.channel) {
+					modlist = mods;
+				}
+			});
+
+			client.addListener('chat', function(channel, user, message) {
+				// Timer on event
+				if(channel === '#'+settings.channel && message.indexOf('!timer on') === 0) {
+					if(_.indexOf(modlist, user.username) != -1 && !timeron) {
+						timerinterval = setInterval(function() {
+							timeron = true;
+							timer.add(1, 's');
+							$('#timer').text(timer.format('hh:mm:ss', {trim: false}));
+						}, 1000);
+					}
+				}
+
+				// Timer off event
+				if(channel === '#'+settings.channel && message.indexOf('!timer off') === 0) {
+					if(_.indexOf(modlist, user.username) != -1) {
+						timeron = false;
+						clearInterval(timerinterval);
+					}
+				}
+			});
+		});
+	</script>
+</html>
