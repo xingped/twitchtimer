@@ -72,7 +72,7 @@
 
 			// Handle window close
 			win.on('close', function() {
-				settings.time = timer.seconds();
+				settings.time = timer.asSeconds();
 				fs.writeFileSync('settings.json', JSON.stringify(settings, null, '\t'));
 				this.close(true);
 				win.close();
