@@ -1,0 +1,98 @@
+.container {
+	margin-top: 15px;
+	text-align: center;
+}
+
+h4 {
+	text-align: left;
+	margin-left: 20px;
+	margin-bottom: 0px;
+	font-weight: bolder;
+}
+
+hr {
+	margin-top: 7px;
+	margin-bottom: 7px;
+	border-color: #ccc;
+}
+
+select {
+	max-width: 150px;
+	display: inline-block !important; 
+	width: auto !important;
+}
+
+.top-btn {
+	display: inline-block;
+	margin-top: -2px;
+	width: auto;
+}
+
+form[name=timeForm] {
+	margin: auto;
+}
+
+form[name=timeForm] input {
+	display: inline-block;
+	width: auto;
+}
+
+#authorLink {
+	margin-top: 8px;
+	margin-right: 10px;
+	font-size: 12;
+}
+
+#oAuthLink {
+	font-size: 12;
+}
+
+#timerNameForm {
+	margin: 10px;
+	position: relative;
+	width: 80%;
+	margin-top: 15px;
+	margin-bottom: 12px;
+}
+
+#editButtons {
+	margin: 10px;
+	position: absolute;
+	top: 60px;
+	right: 0px;
+}
+
+#editButtons button {
+	margin-right: 5px;
+}
+
+.jumbotron {
+	margin: auto;
+	margin-bottom: 10px;
+}
+
+#timerName {
+	font-weight: 400;
+}
+
+.control-label {
+	margin-top: 5px;
+	text-align: right;
+	padding-right: 0px;
+}
+
+.glyphicon-ok-circle {
+	font-size: 24px;
+	line-height: 24px;
+	vertical-align: middle;
+	margin-right: 8px;
+	color: Green;
+}
+
+.glyphicon-ban-circle {
+	font-size: 24px;
+	line-height: 24px;
+	vertical-align: middle;
+	margin-right: 8px;
+	color: Red;
+}

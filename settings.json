@@ -1,11 +1,11 @@
 {
-	"username": "username",
-	"password": "oauth:oauth_key",
-	"channel": "channel",
+	"username": "xingped",
+	"password": "oauth:jyzjq5s9uumf4jeb28zm6a48qdtfeq",
+	"channel": "xingped",
 	"background": "#32cd32",
 	"font_src": "http://fonts.googleapis.com/css?family=Chango",
 	"font_family": "Chango, cursive",
 	"font_color": "#000000",
 	"font_size": 48,
-	"time": 0
+	"time": 4
 }

@@ -1,15 +1,16 @@
 {
 	"name": "TwitchTimer",
 	"main": "index.html",
+	"version": "2.0.0",
+	"manifestUrl": "https://raw.githubusercontent.com/xingped/twitchtimer/master/package.json",
 	"window": {
 		"toolbar": false,
-		"width": 400,
-		"height": 225
+		"width": 500,
+		"height": 320
 	},
 	"dependencies": {
-		"moment": "*",
-		"moment-duration-format": "*",
 		"twitch-irc": "*",
-		"underscore": "*"
+		"angular": "*",
+		"node-webkit-updater": "*"
 	}
 }

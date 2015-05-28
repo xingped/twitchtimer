@@ -1,142 +1,77 @@
-<html>
+<html ng-app="timerApp" ng-controller="timerCtrl">
 	<head>
 		<title>Twitch Timer</title>
-		<script src="js/jquery-1.11.1.min.js"></script>
-		<link rel="stylesheet" href="css/bootstrap.min.css" type="text/css">
-		<script src="js/bootstrap.min.js"></script>
+		<script type="text/javascript" src="node_modules/angular/angular.js"></script>
+		<script type="text/javascript" src="js/ui-bootstrap-tpls-0.12.1.min.js"></script>
+		<script type="text/javascript" src="js/bootstrap-colorpicker-module.js"></script>
+		<script type="text/javascript" src="js/timerApp.js"></script>
+		<link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
+		<link rel="styleSheet" type="text/css" ng-href="{{styles.fontSrc}}">
+		<link rel="styleSheet" type="text/css" href="css/colorpicker.css">
+		<link rel="stylesheet" type="text/css" href="css/main.css">
 	</head>
 	<body>
-		<div class="container" style="margin-top: 15px;">
-			<div class="jumbotron" style="margin-bottom: 10px;">
-				<center><span id="timer" style="font-weight: 400;">00:00:00</span></center>
+		<div ng-show="editingSettings" ng-include="'settings.html'"></div>
+
+		<div ng-hide="editingSettings || updating" class="container">
+
+			<div class="pull-left form">
+				<select class="form-control" ng-model="timer" ng-options="t as t.name for t in timers track by t.id" ng-change="changeTimer();">
+					<option value='' disabled selected>Select a timer...</option>
+				</select>
+				<button type="button" class="btn btn-success btn-sm form-control top-btn" ng-click="newTimer()">
+					<span class="glyphicon glyphicon-plus">&#8203;</span>
+				</button>
 			</div>
-			<center>
-				<button id="start" type="button" class="btn btn-lg btn-success pull-left">Start</button>
-				<button id="reset" type="button" class="btn btn-lg btn-primary pull-right">Reset</button>
-				<button id="stop" type="button" class="btn btn-lg btn-danger">Stop</button>
+
+			<div class="pull-right">
+				<span class="glyphicon glyphicon-ok-circle" ng-show="client.connected">&#8203;</span>
+				<span class="glyphicon glyphicon-ban-circle" ng-hide="client.connected">&#8203;</span>
+				<button type="button" class="btn tn-default" ng-click="editSettings()">
+					<span class="glyphicon glyphicon-cog">&#8203;</span>
+				</button>
+			</div>
+
+			<div class="clearfix"></div>
+
+			<h3 ng-hide="editingTimer">{{timer.name ? timer.name : '&nbsp;'}}</h3>
+			<div id="timerNameForm" class="form">
+				<input type="text" class="form-control" ng-model="timer.name" placeholder="Timer Name..." ng-show="editingTimer">
+			</div>
+
+			<div id="editButtons">
+				<button type="button" class="btn btn-sm btn-primary" ng-click="editTimer();" ng-hide="editingTimer" ng-disabled="!timer">
+					<span class="glyphicon glyphicon-pencil">&#8203;</span>
+				</button>
+				<button type="button" class="btn btn-sm btn-danger" ng-click="deleteTimer()" ng-hide="editingTimer" ng-disabled="!timer">
+					<span class="glyphicon glyphicon-trash">&#8203;</span>
+				</button>
+				<button type="button" class="btn btn-sm btn-success" ng-click="saveTimer();" ng-show="editingTimer" ng-disabled="timeForm.$invalid || !timer.name">
+					<span class="glyphicon glyphicon-ok">&#8203;</span>
+				</button>
+				<button type="button" class="btn btn-sm btn-warning" ng-click="cancelTimer();" ng-show="editingTimer">
+					<span class="glyphicon glyphicon-remove">&#8203;</span>
+				</button>
+			</div>
+
+			<div class="jumbotron"  ng-style="{'background-color': getStyles().backgroundColor}">
+				<span id="timerName" ng-hide="editingTimer" ng-style="getStyles()">{{timer.time | timeFilter:this}}</span>
+				<form name="timeForm" role="form" ng-show="editingTimer" class="form">
+					<input type="text" class="form-control" size="4" maxlength="4" ng-model="hours" placeholder="HH" pattern="[0-9]{0,4}">
+					:
+					<input type="text" class="form-control" size="2" maxlength="2" ng-model="minutes" placeholder="MM" pattern="[0-9]{0,2}">
+					:
+					<input type="text" class="form-control" size="2" maxlength="2" ng-model="seconds" placeholder="SS" pattern="[0-9]{0,2}">
+				</form>
+			</div>
+
+			<div style="margin: auto;">
+				<button type="button" class="btn btn-lg btn-success pull-left" ng-click="startTimer()" ng-disabled="!timer">Start</button>
+				<button type="button" class="btn btn-lg btn-primary pull-right" ng-click="resetTimer()" ng-disabled="!timer">Reset</button>
+				<button type="button" class="btn btn-lg btn-danger" ng-click="stopTimer()" ng-disabled="!timer">Stop</button>
 				<div class="clearfix"></div>
-			</center>
+			</div>
 		</div>
-		<span class="pull-right" style="margin-top: 8px; margin-right: 10px; font-size: 12">Made by: <a id="author" href="http://www.paulgatterdam.com">Paul Gatterdam</a></span>
+		<span id="authorLink" class="pull-right">Made by: <a href="" ng-click="openLink('https://github.com/xingped', $event); ">xingped</a></span>
 	</body>
-	<script type="text/javascript">
-		$(document).on('ready', function() {
-			// Initial setup
-			var moment = require('moment');
-			require('moment-duration-format');
-			var _ = require('underscore');
-			var gui = require('nw.gui');
-			var win = gui.Window.get();
-
-			// Get settings attributes
-			var fs = require('fs');
-			var settings_file = fs.readFileSync('settings.json');
-			var settings = JSON.parse(settings_file);
-
-			// Set settings attributes
-			$('head').append('<link href="'+settings.font_src+'" rel="stylesheet" type="text/css">');
-			$('.jumbotron').css('background-color', settings.background);
-			$('#timer').css('color', settings.font_color);
-			$('#timer').css('font-family', settings.font_family);
-			$('#timer').css('font-size', settings.font_size);
-
-			// Set up initial timer
-			timeron = false;
-			timer = moment.duration(settings.time, 's');
-			$('#timer').text(timer.format('hh:mm:ss', {trim: false}));
-			
-			// Handle button clicks
-			var timerinterval;
-			$('#start').click(function() {
-				timeron = true;
-				timerinterval = setInterval(function() {
-					timer.add(1, 's');
-					$('#timer').text(timer.format('hh:mm:ss', {trim: false}));
-				}, 1000);
-			});
-
-			$('#stop').click(function() {
-				timeron = false;
-				clearInterval(timerinterval);
-			});
-
-			$('#reset').click(function() {
-				var reset = confirm("Are you sure you want to reset timer?");
-				if(reset) {
-					clearInterval(timerinterval);
-					timeron = false;
-					timer = moment.duration(0, 's');
-					$('#timer').text(timer.format('hh:mm:ss', {trim: false}));
-				}
-			});
-
-			// Handle window close
-			win.on('close', function() {
-				settings.time = timer.asSeconds();
-				fs.writeFileSync('settings.json', JSON.stringify(settings, null, '\t'));
-				this.close(true);
-				win.close();
-			});
-
-			// Open author link in external browser
-			$('#author').click(function(e) {
-				e.preventDefault();
-				gui.Shell.openExternal($(this).attr('href'));
-			});
-
-			/****************
-			* IRC Functions *
-			****************/
-			var irc = require('twitch-irc');
-
-			var client = new irc.client({
-				options: {
-					debug: true
-				},
-				identity: {
-					username: settings.username,
-					password: settings.password
-				},
-				channels: [settings.channel]
-			});
-
-			client.connect();
-
-			// On channel join
-			client.addListener('join', function(channel, username) {
-				if(username === settings.username) {
-					client.mods(settings.channel);
-				}
-			});
-
-			// On mods query event
-			var modlist;
-			client.addListener('mods', function(channel, mods) {
-				if(channel === '#'+settings.channel) {
-					modlist = mods;
-				}
-			});
-
-			client.addListener('chat', function(channel, user, message) {
-				// Timer on event
-				if(channel === '#'+settings.channel && message.indexOf('!timer on') === 0) {
-					if(_.indexOf(modlist, user.username) != -1 && !timeron) {
-						timerinterval = setInterval(function() {
-							timeron = true;
-							timer.add(1, 's');
-							$('#timer').text(timer.format('hh:mm:ss', {trim: false}));
-						}, 1000);
-					}
-				}
-
-				// Timer off event
-				if(channel === '#'+settings.channel && message.indexOf('!timer off') === 0) {
-					if(_.indexOf(modlist, user.username) != -1) {
-						timeron = false;
-						clearInterval(timerinterval);
-					}
-				}
-			});
-		});
-	</script>
 </html>

@@ -1,0 +1,70 @@
+<div class="container">
+	<form class="form-horizontal">
+		<h4>Twitch Settings</h4>
+		<hr />
+		<div class="form-group">
+			<label class="col-xs-3 control-label">Username:</label>
+			<div class="col-xs-9">
+				<input type="text" class="form-control" ng-model="$parent.username">
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="col-xs-3 control-label">OAuth:</label>
+			<div class="col-xs-9">
+				<input type="text" class="form-control" ng-model="$parent.password">
+			</div>
+			(<a href="" ng-click="openLink('http://www.twitchapps.com/tmi/',$event)">Get OAuth Key Here</a>)
+		</div>
+
+		<h4>Style Settings</h4>
+		<hr />
+		<div class="form-group">
+			<label class="col-xs-3 control-label">Background:</label>
+			<div class="col-xs-9">
+				<div class="input-group">
+					<span class="input-group-btn">
+						<button colorpicker type="button" class="btn btn-default form-control" colorpicker-position="top" ng-model="$parent.styles.backgroundColor">
+							<span class="glyphicon glyphicon-tint">&#8203;</span>
+						</button>
+					</span>
+					<input type="text" class="form-control" ng-model="$parent.styles.backgroundColor">
+				</div>
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="col-xs-3 control-label">Font Source:</label>
+			<div class="col-xs-9">
+				<input type="text" class="form-control" ng-model="$parent.styles.fontSrc">
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="col-xs-3 control-label">Font Family:</label>
+			<div class="col-xs-9">
+				<input type="text" class="form-control" ng-model="$parent.styles.fontFamily">
+			</div>
+			(<a href="" ng-click="openLink('http://www.google.com/fonts',$event)">Get More Fonts Here</a>)
+		</div>
+
+		<div class="form-group">
+			<label class="col-xs-3 control-label">Font Color:</label>
+			<div class="col-xs-9">
+				<div class="input-group">
+					<span class="input-group-btn">
+						<button colorpicker type="button" class="btn btn-default form-control" colorpicker-position="top" ng-model="$parent.styles.color">
+							<span class="glyphicon glyphicon-tint">&#8203;</span>
+						</button>
+					</span>
+					<input type="text" class="form-control" ng-model="$parent.styles.color">
+				</div>
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="col-xs-3 control-label">Font Size:</label>
+			<div class="col-xs-9">
+				<input type="text" class="form-control" ng-model="$parent.styles.fontSize" pattern="[0-9]*">
+			</div>
+		</div>
+	</form>
+	<button type="button" class="btn btn-success" ng-click="saveSettings();">Save</button>
+	<button type="button" class="btn btn-default" ng-click="cancelSettings();">Cancel</button>
+</div>
