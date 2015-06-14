@@ -5,7 +5,7 @@
 	"manifestUrl": "https://raw.githubusercontent.com/xingped/twitchtimer/master/package.json",
 	"repository": {
 		"type": "git",
-		"url": "git://github.com/xingped/twitchtimer"
+		"url": "git://github.com/xingped/twitchtimer.git"
 	},
 	"window": {
 		"toolbar": false,
