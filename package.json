@@ -1,8 +1,12 @@
 {
 	"name": "TwitchTimer",
 	"main": "index.html",
-	"version": "2.0.0",
+	"version": "2.0.1",
 	"manifestUrl": "https://raw.githubusercontent.com/xingped/twitchtimer/master/package.json",
+	"repository": {
+		"type": "git",
+		"url": "git://github.com/xingped/twitchtimer"
+	},
 	"window": {
 		"toolbar": false,
 		"width": 500,
