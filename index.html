@@ -1,10 +1,14 @@
+<!DOCTYPE html>
 <html ng-app="timerApp" ng-controller="timerCtrl">
 	<head>
 		<title>Twitch Timer</title>
-		<script type="text/javascript" src="node_modules/angular/angular.js"></script>
+
+		<script type="text/javascript" src="node_modules/angular/angular.min.js"></script>
+		<script src="node_modules/angular-electron/angular-electron.js"></script>
 		<script type="text/javascript" src="js/ui-bootstrap-tpls-0.12.1.min.js"></script>
 		<script type="text/javascript" src="js/bootstrap-colorpicker-module.js"></script>
 		<script type="text/javascript" src="js/timerApp.js"></script>
+
 		<link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
 		<link rel="styleSheet" type="text/css" ng-href="{{styles.fontSrc}}">
 		<link rel="styleSheet" type="text/css" href="css/colorpicker.css">
@@ -54,8 +58,8 @@
 				</button>
 			</div>
 
-			<div class="jumbotron"  ng-style="{'background-color': getStyles().backgroundColor}">
-				<span id="timerName" ng-hide="editingTimer" ng-style="getStyles()">{{timer.time | timeFilter:this}}</span>
+			<div class="jumbotron"  ng-style="{'background-color': styles.backgroundColor}">
+				<span id="timerName" ng-hide="editingTimer" ng-style="styles">{{timer.time | timeFilter:this}}</span>
 				<form name="timeForm" role="form" ng-show="editingTimer" class="form">
 					<input type="text" class="form-control" size="4" maxlength="4" ng-model="hours" placeholder="HH" pattern="[0-9]{0,4}">
 					:
@@ -72,6 +76,6 @@
 				<div class="clearfix"></div>
 			</div>
 		</div>
-		<span id="authorLink" class="pull-right">Made by: <a href="" ng-click="openLink('https://github.com/xingped', $event); ">xingped</a></span>
+		<span id="authorLink" class="pull-right">Made by: <a external-link href="https://github.com/xingped" target="_blank">xingped</a></span>
 	</body>
 </html>

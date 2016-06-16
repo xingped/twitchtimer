@@ -1,20 +1,22 @@
 {
-	"name": "TwitchTimer",
-	"main": "index.html",
-	"version": "2.0.1",
-	"manifestUrl": "https://raw.githubusercontent.com/xingped/twitchtimer/master/package.json",
-	"repository": {
-		"type": "git",
-		"url": "git://github.com/xingped/twitchtimer.git"
-	},
-	"window": {
-		"toolbar": false,
-		"width": 500,
-		"height": 320
-	},
-	"dependencies": {
-		"twitch-irc": "*",
-		"angular": "*",
-		"node-webkit-updater": "*"
-	}
+  "name": "TwitchTimer",
+  "main": "main.js",
+  "version": "2.0.1",
+  "manifestUrl": "https://raw.githubusercontent.com/xingped/twitchtimer/master/package.json",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/xingped/twitchtimer.git"
+  },
+  "window": {
+    "toolbar": false,
+    "width": 500,
+    "height": 320
+  },
+  "dependencies": {
+    "angular": "^1.5.6",
+    "angular-electron": "^0.2.1",
+    "configstore": "^2.0.0",
+    "electron-json-storage": "^2.0.0",
+    "tmi.js": "0.0.29"
+  }
 }
