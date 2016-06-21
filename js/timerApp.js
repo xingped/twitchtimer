@@ -209,7 +209,6 @@ timerApp.controller('timerCtrl', ['$scope', '$interval', '$filter', 'shell', fun
 		console.log('***CONNECTED***');
 		$scope.client.mods($scope.channel).then(function(data) {
 			$scope.mods = data;
-			console.log($scope.mods);
 		});
 	});
 
@@ -229,8 +228,24 @@ timerApp.controller('timerCtrl', ['$scope', '$interval', '$filter', 'shell', fun
 		console.log(message);
 	});
 
+	// If a mod is added or removed
+	$scope.client.on('mod', function(channel, username) {
+		$scope.mods.push(username);
+	});
+
+	$scope.client.on('unmod', function(channel, username) {
+		for(var i = 0; i < $scope.mods.length; i++) {
+			if(username === $scope.mods[i]) {
+				$scope.mods.splice(i,1);
+				break;
+			}
+		}
+	});
+
+	// Incoming chat messages
 	$scope.client.on('chat', function(channel, user, message) {
-		if($scope.timer && $scope.mods.indexOf(user.username) !== -1) {
+		if($scope.timer && ($scope.mods.indexOf(user.username) !== -1
+		  || user.username.toLower() === $scope.username.toLower())) {
 			if(message.indexOf('!timer on') === 0) {
 				$scope.startTimer();
 			}
