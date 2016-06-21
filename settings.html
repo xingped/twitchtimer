@@ -3,68 +3,112 @@
 		<h4>Twitch Settings</h4>
 		<hr />
 		<div class="form-group">
-			<label class="col-xs-3 control-label">Username:</label>
-			<div class="col-xs-9">
+			<label class="col-xs-4 control-label">Username:</label>
+			<div class="col-xs-8">
 				<input type="text" class="form-control" ng-model="$parent.username">
 			</div>
 		</div>
 		<div class="form-group">
-			<label class="col-xs-3 control-label">OAuth:</label>
-			<div class="col-xs-9">
+			<label class="col-xs-4 control-label">OAuth:</label>
+			<div class="col-xs-8">
 				<input type="text" class="form-control" ng-model="$parent.password">
 			</div>
 			(<a external-link href="http://www.twitchapps.com/tmi/" target="_blank">Get OAuth Key Here</a>)
 		</div>
 
-		<h4>Style Settings</h4>
-		<hr />
+		<h4>Title Styling</h4>
+		<hr>
+
 		<div class="form-group">
-			<label class="col-xs-3 control-label">Background:</label>
-			<div class="col-xs-9">
-				<div class="input-group">
-					<span class="input-group-btn">
-						<button colorpicker type="button" class="btn btn-default form-control" colorpicker-position="top" ng-model="$parent.styles.backgroundColor">
-							<span class="glyphicon glyphicon-tint">&#8203;</span>
-						</button>
-					</span>
-					<input type="text" class="form-control" ng-model="$parent.styles.backgroundColor">
-				</div>
+			<label class="col-xs-4 control-label">Font Source:</label>
+			<div class="col-xs-8">
+				<input type="text" class="form-control" ng-model="$parent.titleStyle['font-src']">
 			</div>
 		</div>
+
 		<div class="form-group">
-			<label class="col-xs-3 control-label">Font Source:</label>
-			<div class="col-xs-9">
-				<input type="text" class="form-control" ng-model="$parent.styles.fontSrc">
-			</div>
-		</div>
-		<div class="form-group">
-			<label class="col-xs-3 control-label">Font Family:</label>
-			<div class="col-xs-9">
-				<input type="text" class="form-control" ng-model="$parent.styles.fontFamily">
+			<label class="col-xs-4 control-label">Font Family:</label>
+			<div class="col-xs-8">
+				<input type="text" class="form-control" ng-model="$parent.titleStyle['font-family']">
 			</div>
 			(<a external-link href="http://www.google.com/fonts" target="_blank">Get More Fonts Here</a>)
 		</div>
 
 		<div class="form-group">
-			<label class="col-xs-3 control-label">Font Color:</label>
-			<div class="col-xs-9">
+			<label class="col-xs-4 control-label">Font Color:</label>
+			<div class="col-xs-8">
 				<div class="input-group">
 					<span class="input-group-btn">
-						<button colorpicker type="button" class="btn btn-default form-control" colorpicker-position="top" ng-model="$parent.styles.color">
-							<span class="glyphicon glyphicon-tint">&#8203;</span>
+						<button colorpicker type="button" class="btn btn-default form-control" colorpicker-position="top" ng-model="$parent.titleStyle['color']">
+							<span class="glyphicon glyphicon-tint" ng-style="{color: $parent.titleStyle['color']}">&#8203;</span>
 						</button>
 					</span>
-					<input type="text" class="form-control" ng-model="$parent.styles.color">
+					<input type="text" class="form-control" ng-model="$parent.titleStyle['color']">
 				</div>
 			</div>
 		</div>
+
 		<div class="form-group">
-			<label class="col-xs-3 control-label">Font Size:</label>
-			<div class="col-xs-9">
-				<input type="text" class="form-control" ng-model="$parent.styles.fontSize" pattern="[0-9]*">
+			<label class="col-xs-4 control-label">Font Size:</label>
+			<div class="col-xs-8">
+				<input type="text" class="form-control" ng-model="$parent.titleStyle['font-size']" pattern="[0-9]*(px|m)">
+			</div>
+		</div>
+
+		<h4>Timer Styling</h4>
+		<hr>
+
+		<div class="form-group">
+			<label class="col-xs-4 control-label">Background:</label>
+			<div class="col-xs-8">
+				<div class="input-group">
+					<span class="input-group-btn">
+						<button colorpicker type="button" class="btn btn-default form-control" colorpicker-position="top" ng-model="$parent.timerStyle['background-color']">
+							<span class="glyphicon glyphicon-tint" ng-style="{color: $parent.timerStyle['background-color']}">&#8203;</span>
+						</button>
+					</span>
+					<input type="text" class="form-control" ng-model="$parent.timerStyle['background-color']">
+				</div>
+			</div>
+		</div>
+
+		<div class="form-group">
+			<label class="col-xs-4 control-label">Font Source:</label>
+			<div class="col-xs-8">
+				<input type="text" class="form-control" ng-model="$parent.timerStyle['font-src']">
+			</div>
+		</div>
+
+		<div class="form-group">
+			<label class="col-xs-4 control-label">Font Family:</label>
+			<div class="col-xs-8">
+				<input type="text" class="form-control" ng-model="$parent.timerStyle['font-family']">
+			</div>
+			(<a external-link href="http://www.google.com/fonts" target="_blank">Get More Fonts Here</a>)
+		</div>
+
+		<div class="form-group">
+			<label class="col-xs-4 control-label">Font Color:</label>
+			<div class="col-xs-8">
+				<div class="input-group">
+					<span class="input-group-btn">
+						<button colorpicker type="button" class="btn btn-default form-control" colorpicker-position="top" ng-model="$parent.timerStyle['color']">
+							<span class="glyphicon glyphicon-tint" ng-style="{color: $parent.timerStyle['color']}">&#8203;</span>
+						</button>
+					</span>
+					<input type="text" class="form-control" ng-model="$parent.timerStyle['color']">
+				</div>
+			</div>
+		</div>
+
+		<div class="form-group">
+			<label class="col-xs-4 control-label">Font Size:</label>
+			<div class="col-xs-8">
+				<input type="text" class="form-control" ng-model="$parent.timerStyle['font-size']" pattern="[0-9]*(px|m)">
 			</div>
 		</div>
 	</form>
+
 	<button type="button" class="btn btn-success" ng-click="saveSettings();">Save</button>
 	<button type="button" class="btn btn-default" ng-click="cancelSettings();">Cancel</button>
 </div>

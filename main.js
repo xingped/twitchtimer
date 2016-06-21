@@ -1,6 +1,7 @@
 const electron = require('electron');
 const Configstore = require('configstore');
 const pkg = require('./package.json');
+const request = require('request');
 
 // app - Module to control application life.
 // BrowserWindow - Module to create native browser window.
@@ -34,7 +35,7 @@ function createWindow() {
 	win.loadURL(`file://${__dirname}/index.html`);
 
 	// Open the DevTools.
-	win.webContents.openDevTools();
+	// win.webContents.openDevTools();
 
 	// Store window's position and size settings on close
 	win.on('close', () => {
@@ -48,28 +49,63 @@ function createWindow() {
 		// when you should delete the corresponding element.
 		win = null;
 	});
+
+	// Check for updates
+	win.webContents.on('did-finish-load', () => {
+		request({
+			url: pkg.manifestUrl
+		}, function(error, response, body) {
+			if(!error && response.statusCode === 200) {
+				body = JSON.parse(body);
+				var pkgVersion = pkg.version ? pkg.version.split('.') : '0.0.0';
+				var webVersion = body.version ? body.version.split('.') : '0.0.0';
+				var newVersion = false;
+				
+				for(var i = 0; i < pkgVersion.length; i++) {
+					if(webVersion[i] === pkgVersion[i]) {
+						continue
+					} else if(webVersion[i] > pkgVersion[i]) {
+						newVersion = true;
+						break;
+					} else if(webVersion[i] < pkgVersion[i]) {
+						break;
+					}
+				}
+
+				if(newVersion) {
+					win.webContents.send('update');
+				}
+			}
+		});
+	});
 }
 
 // Create and store default settings
 function setDefaults() {
 	config.all = {
-		styles: {
-		backgroundColor:  "#32cd32",
-		fontSrc: "http://fonts.googleapis.com/css?family=Chango",
-		fontFamily: "Chango, cursive",
-		fontColor: "#000000",
-		fontSize: 48
-	},
-	timers: [],
-	windowSettings: {
-		width: 800,
-		height: 600
-	},
-	username: '',
-	password: '',
-	channel: '',
-	idInc: 0,
-	activeID: null
+		titleStyle: {
+			'font-src': 'http://fonts.googleapis.com/css?family=Chango',
+			'font-family': 'Chango, cursive',
+			'color': '#000000',
+			'font-size': '48px'
+		},
+		timerStyle: {
+			'background-color': '#32cd32',
+			'font-src': 'http://fonts.googleapis.com/css?family=Chango',
+			'font-family': 'Chango, cursive',
+			'color': '#000000',
+			'font-size': '48px'
+		},
+		timers: [],
+		windowSettings: {
+			width: 800,
+			height: 600
+		},
+		username: '',
+		password: '',
+		channel: '',
+		idInc: 0,
+		activeID: null
 	}
 }
 
@@ -102,24 +138,10 @@ ipcMain.on('get', (event, key) => {
 
 ipcMain.on('getAll', (event) => {
 	event.returnValue = config.all;
-})
+});
 
 ipcMain.on('set', (event, key, val) => {
 	console.log('config.set: '+key, val);
 	config.set(key, val);
 	event.returnValue = true;
-});
-
-ipcMain.on('checkUpdate', (event) => {
-	// var dest = app.getPath('temp') + '_' + Math.random().toString(36).substr(2, 9);
-	// var file = fs.createWriteStream(dest);
-	// var request = http.get(url, function(response) {
-	// 	response.pipe(file);
-	// 	file.on('finish', function() {
-	// 		file.close();  // close() is async, call cb after close completes.
-	// 	});
-	// 	file.on('close')
-	// }).on('error', function(err) { // Handle errors
-	// 	fs.unlink(dest); // Delete the file async. (But we don't check the result)
-	// });
 });

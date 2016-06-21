@@ -1,26 +1,18 @@
-window.onerror = function() {return true;}
-
 var timerApp = angular.module('timerApp', ['ui.bootstrap', 'colorpicker.module', 'angular-electron']);
 
-timerApp.controller('timerCtrl', ['$scope', '$interval', '$filter', '$timeout', 'shell', function($scope, $interval, $filter, $timeout, shell) {
+timerApp.controller('timerCtrl', ['$scope', '$interval', '$filter', 'shell', function($scope, $interval, $filter, shell) {
 	const {ipcRenderer} = require('electron');
 
 	// **** INITIALIZE **** //
 	(function() {
-		// if(ipcRenderer.sendSync('checkUpdate')) {
-		// 	var confirmUpdat = confirm('There is an update available. Would you like to open the download page?');
-		// 	if(confirmUpdate) {
-		// 		shell.openExternal('https://github.com/xingped/twitchtimer/releases');
-		// 	}
-		// }
-
 		$scope.editingSettings = false;
 		$scope.editingTimer = false;
 
 		$scope.username = ipcRenderer.sendSync('get', 'username');
 		$scope.channel = ipcRenderer.sendSync('get', 'channel');
 		$scope.password = ipcRenderer.sendSync('get', 'password');
-		$scope.styles = ipcRenderer.sendSync('get', 'styles');
+		$scope.titleStyle = ipcRenderer.sendSync('get', 'titleStyle');
+		$scope.timerStyle = ipcRenderer.sendSync('get', 'timerStyle');
 		$scope.timers = ipcRenderer.sendSync('get', 'timers');
 		$scope.activeID = ipcRenderer.sendSync('get', 'activeID');
 
@@ -39,28 +31,11 @@ timerApp.controller('timerCtrl', ['$scope', '$interval', '$filter', '$timeout', 
 		}
 	});
 
-	// Check for updates
-	// var pkg = require('./package.json');
-	// var updater = require('node-webkit-updater');
-	// var upd = new updater(pkg);
-	
-	// upd.checkNewVersion(function(error, newVersionExists, manifest) {
-	// 	if(!error && newVersionExists) {
-	// 		var confirmUpdate = confirm('There is an update available. Would you like to open the download page?');
-	// 		if(confirmUpdate) {
-	// 			//$scope.gui.Shell.openExternal('https://github.com/xingped/twitchtimer/releases');
-	// 		} else {
-	// 			return;
-	// 		}
-	// 	} else if(error) {
-	// 		console.log('Error checking version: '+error);
-	// 	}
-	// });
-
 	// Open/close settings
 	$scope.editSettings = function() {
 		$scope.editingSettings = true;
-		$scope.storedStyles = $scope.styles;
+		$scope.storedTitleStyle = $scope.titleStyle;
+		$scope.storedTimerStyle = $scope.timerStyle;
 		$scope.storedUsername = $scope.username;
 		$scope.storedPassword = $scope.password;
 	}
@@ -72,14 +47,16 @@ timerApp.controller('timerCtrl', ['$scope', '$interval', '$filter', '$timeout', 
 			$scope.reconnect();
 		}
 
-		ipcRenderer.sendSync('set', 'styles', $scope.styles);
+		ipcRenderer.sendSync('set', 'titleStyle', $scope.titleStyle);
+		ipcRenderer.sendSync('set', 'timerStyle', $scope.timerStyle);
 		ipcRenderer.sendSync('set', 'username', $scope.username);
 		ipcRenderer.sendSync('set', 'password', $scope.password);
 		ipcRenderer.sendSync('set', 'channel', '#'.concat($scope.username));
 	}
 
 	$scope.cancelSettings = function() {
-		$scope.styles = $scope.storedStyles;
+		$scope.titleStyle = $scope.storedTitleStyle;
+		$scope.timerStyle = $scope.storedTimerStyle;
 		$scope.username = $scope.storedUsername;
 		$scope.password = $scope.storedPassword;
 		$scope.editingSettings = false;

@@ -26,6 +26,18 @@
 				<button type="button" class="btn btn-success btn-sm form-control top-btn" ng-click="newTimer()">
 					<span class="glyphicon glyphicon-plus">&#8203;</span>
 				</button>
+				<button type="button" class="btn btn-sm btn-primary form-control top-btn" ng-click="editTimer();" ng-hide="editingTimer" ng-disabled="!timer">
+					<span class="glyphicon glyphicon-pencil">&#8203;</span>
+				</button>
+				<button type="button" class="btn btn-sm btn-danger form-control top-btn" ng-click="deleteTimer()" ng-hide="editingTimer" ng-disabled="!timer">
+					<span class="glyphicon glyphicon-trash">&#8203;</span>
+				</button>
+				<button type="button" class="btn btn-sm btn-info form-control top-btn" ng-click="saveTimer();" ng-show="editingTimer" ng-disabled="timeForm.$invalid || !timer.name">
+					<span class="glyphicon glyphicon-ok">&#8203;</span>
+				</button>
+				<button type="button" class="btn btn-sm btn-warning form-control top-btn" ng-click="cancelTimer();" ng-show="editingTimer">
+					<span class="glyphicon glyphicon-remove">&#8203;</span>
+				</button>
 			</div>
 
 			<div class="pull-right">
@@ -38,28 +50,15 @@
 
 			<div class="clearfix"></div>
 
-			<h3 ng-hide="editingTimer">{{timer.name ? timer.name : '&nbsp;'}}</h3>
-			<div id="timerNameForm" class="form">
-				<input type="text" class="form-control" ng-model="timer.name" placeholder="Timer Name..." ng-show="editingTimer">
-			</div>
+			<div class="jumbotron"  ng-style="{'background-color': timerStyle['background-color']}">
 
-			<div id="editButtons">
-				<button type="button" class="btn btn-sm btn-primary" ng-click="editTimer();" ng-hide="editingTimer" ng-disabled="!timer">
-					<span class="glyphicon glyphicon-pencil">&#8203;</span>
-				</button>
-				<button type="button" class="btn btn-sm btn-danger" ng-click="deleteTimer()" ng-hide="editingTimer" ng-disabled="!timer">
-					<span class="glyphicon glyphicon-trash">&#8203;</span>
-				</button>
-				<button type="button" class="btn btn-sm btn-success" ng-click="saveTimer();" ng-show="editingTimer" ng-disabled="timeForm.$invalid || !timer.name">
-					<span class="glyphicon glyphicon-ok">&#8203;</span>
-				</button>
-				<button type="button" class="btn btn-sm btn-warning" ng-click="cancelTimer();" ng-show="editingTimer">
-					<span class="glyphicon glyphicon-remove">&#8203;</span>
-				</button>
-			</div>
+				<div ng-hide="editingTimer" ng-style="titleStyle">{{timer.name ? timer.name : '&nbsp;'}}</div>
+				<div id="timerNameForm" class="form">
+					<input type="text" class="form-control" ng-model="timer.name" placeholder="Timer Name..." ng-show="editingTimer">
+				</div>
 
-			<div class="jumbotron"  ng-style="{'background-color': styles.backgroundColor}">
-				<span id="timerName" ng-hide="editingTimer" ng-style="styles">{{timer.time | timeFilter:this}}</span>
+				<div id="timerName" ng-hide="editingTimer" ng-style="timerStyle">{{timer.time | timeFilter:this}}</div>
+
 				<form name="timeForm" role="form" ng-show="editingTimer" class="form">
 					<input type="text" class="form-control" size="4" maxlength="4" ng-model="hours" placeholder="HH" pattern="[0-9]{0,4}">
 					:
@@ -69,7 +68,7 @@
 				</form>
 			</div>
 
-			<div style="margin: auto;">
+			<div>
 				<button type="button" class="btn btn-lg btn-success pull-left" ng-click="startTimer()" ng-disabled="!timer">Start</button>
 				<button type="button" class="btn btn-lg btn-primary pull-right" ng-click="resetTimer()" ng-disabled="!timer">Reset</button>
 				<button type="button" class="btn btn-lg btn-danger" ng-click="stopTimer()" ng-disabled="!timer">Stop</button>
