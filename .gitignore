@@ -1,2 +1,8 @@
 database/
 node_modules/
+.DS_Store
+TwitchTimer-darwin-x64/
+TwitchTimer-linux-ia32/
+TwitchTimer-linux-x64/
+TwitchTimer-win32-ia32/
+TwitchTimer-win32-x64/
