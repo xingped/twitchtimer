@@ -1,7 +1,7 @@
 {
   "name": "TwitchTimer",
   "main": "main.js",
-  "version": "3.0.1",
+  "version": "3.0.2",
   "manifestUrl": "https://raw.githubusercontent.com/xingped/twitchtimer/master/package.json",
   "repository": {
     "type": "git",
