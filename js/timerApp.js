@@ -152,6 +152,7 @@ timerApp.controller('timerCtrl', ['$scope', '$interval', '$filter', 'shell', fun
 		$scope.stopTimer();
 		if($scope.timer) {
 			$scope.activeID = $scope.timer.id;
+			$scope.timer = $filter('filter')($scope.timers, {id: $scope.activeID}, true)[0];
 			ipcRenderer.sendSync('set', 'activeID', $scope.activeID);
 		}
 	}

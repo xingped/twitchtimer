@@ -6,3 +6,4 @@ TwitchTimer-linux-ia32/
 TwitchTimer-linux-x64/
 TwitchTimer-win32-ia32/
 TwitchTimer-win32-x64/
+*.zip
